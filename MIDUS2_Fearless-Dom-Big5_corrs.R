@@ -4,14 +4,14 @@
 ##
 ## Purpose of script: A single workflow that takes personality data from the
 ## MIDUS2 sample and examines the correlations between dominance ("agency") and
-## the Big 5 (as measured by the MIDI and MPI).
+## the Big 5 (as measured by the MIDI, MPQ, and PWBQ).
 ##
 ## Author: Dr Drew M Altschul
 ##
 ## Date Created: 2023-12-04
 ##
 ## Copyright (c) Drew M Altschul, 2023
-## Email: dmaltschil@gmail.com
+## Email: dmaltschul@gmail.com
 ##
 ## ---------------------------
 ##
@@ -202,7 +202,7 @@ O =~ Creative + Imaginative + Curious + Broadminded + Intelligent + Adventurous 
 
 '
 
-m.O.1 = cfa(m.O.1, midus2, estimator="WLSMV", ordered=TRUE)
+f.O.1 = cfa(m.O.1, midus2, estimator="WLSMV", ordered=TRUE)
 
 fitMeasures(f.O.1, fit.measures = c('chisq','df','SRMR','CFI'))
 
@@ -242,7 +242,7 @@ fitMeasures(f.N.1, fit.measures = c('chisq','df','SRMR','CFI'))
 m.all.1 <- '
 D =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident
 E =~ Lively + Friendly + Active + Talkative + Outgoing
-O =~ Creative + Imaginative + Curious + Broadminded + Intelligent + Adventurous #+ Sophisticated
+O =~ Creative + Imaginative + Curious + Broadminded + Intelligent + Adventurous + Sophisticated
 C =~ Organized + Hardworking + Careless + Thorough + Responsible
 A =~ Helpful + Caring + Softhearted + Sympathetic + Warm
 N =~ Nervous + Worrying + Moody + Calm
@@ -336,7 +336,7 @@ fitMeasures(f.D.2, fit.measures = c('chisq','df','SRMR','CFI'))
 summary(f.D.2)
 
 
-
+## Trying augmented D in 6-factor model
 m.all.2 <- '
 D =~ Dominant + Outspoken + Assertive + Forceful + Selfconfident +
 not_afraid_to_speak + like_to_lead + talk_people_into + decisions
@@ -350,7 +350,7 @@ N =~ Nervous + Worrying + Moody + Calm
 
 f.all.2 = cfa(m.all.2, midus2, estimator="WLSMV", ordered=TRUE)
 
-fitMeasures(f.all.2, fit.measures = c('chisq','df','SRMR','CFI'))
+fitMeasures(f.all.2, fit.measures = c('chisq','df','SRMR','CFI')) # fit is acceptable
 
 summary(f.all.2)
 
@@ -366,8 +366,6 @@ midus2$DomNew = midus2$Dominant + midus2$Outspoken + midus2$Assertive +
   midus2$Forceful + midus2$Selfconfident + midus2$not_afraid_to_speak +
   midus2$decisions + midus2$talk_people_into + midus2$like_to_lead
  
-#cor(midus2$Dom, midus2$DomNew, use="pairwise.complete")
-
 
 cormat2 = rcorr(x=as.matrix(midus2[,c('DomNew','Ext','Agr','Con','OpnNew','Neu')]), type="spearman")
 
